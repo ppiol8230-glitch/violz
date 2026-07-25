@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 680" role="img" aria-label="Cello line drawing">
+<style>.s{fill:none;stroke:#262019;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.a{stroke:#9c6a38;stroke-width:1.3}.t{stroke-width:1.4}</style>
+<g class="s" transform="translate(120,0)">
+  <!-- body -->
+  <path id="bd" d="M0,285 C46,278 82,302 83,346 C83,378 76,399 69,412 C55,418 49,432 49,446 C49,460 56,474 71,481 C89,493 99,523 99,560 C99,606 56,642 0,645"/>
+  <use href="#bd" transform="scale(-1,1)"/>
+  <!-- f-holes -->
+  <g id="fh"><circle cx="36" cy="428" r="6"/><path d="M34,438 C28,458 44,478 38,499" class="t"/><circle cx="42" cy="507" r="7"/><path d="M28.5,465 l7.5,-2 M40,470 l7.5,-2" class="t"/></g>
+  <use href="#fh" transform="scale(-1,1)"/>
+  <!-- fingerboard -->
+  <path d="M-12,102 L12,102 L18,296 C18,306 -18,306 -18,296 Z"/>
+  <!-- pegbox -->
+  <path d="M-10,102 C-11,84 -11,70 -8.5,56 M10,102 C11,84 11,70 8.5,56"/>
+  <path d="M-11,72 h-15 M-11,90 h-15 M11,80 h15 M11,98 h15" class="t"/>
+  <ellipse cx="-29" cy="72" rx="4" ry="5.4"/><ellipse cx="-29" cy="90" rx="4" ry="5.4"/>
+  <ellipse cx="29" cy="80" rx="4" ry="5.4"/><ellipse cx="29" cy="98" rx="4" ry="5.4"/>
+  <!-- scroll -->
+  <path d="M-8.5,56 C-13,43 -14,29 -9.5,21 C-4.5,13 8.5,13 12,21 C15.5,29 13,39 8.5,47 C5,53 -1,54 -3.5,49 C-5.5,45 -3.5,40 0,40"/>
+  <circle cx="10.5" cy="23" r="3" class="t"/>
+  <!-- strings -->
+  <g class="a"><path d="M-6,105 L-14,520 M-2,105 L-4.7,520 M2,105 L4.7,520 M6,105 L14,520"/></g>
+  <!-- bridge -->
+  <path d="M-20,505 L20,505 L15.5,472 L-15.5,472 Z" class="t"/>
+  <!-- tailpiece -->
+  <path d="M-12,520 C-14.5,562 -9,590 0,600 C9,590 14.5,562 12,520 Z"/>
+  <path d="M0,600 L0,641" class="t"/>
+  <!-- endpin -->
+  <path d="M0,645 L0,672 M-4,672 L4,672" class="t"/>
+</g>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 560" role="img" aria-label="Viola line drawing">
+<style>.s{fill:none;stroke:#262019;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.a{stroke:#9c6a38;stroke-width:1.2}.t{stroke-width:1.3}</style>
+<g class="s" transform="translate(105,0)">
+  <!-- body (fuller bouts than violin) -->
+  <path id="bd" d="M0,236 C40,229 70,252 71,290 C71,318 65,337 60,348 C48,353 43,366 43,378 C43,390 49,402 62,407 C77,417 86,443 86,474 C86,512 50,540 0,542"/>
+  <use href="#bd" transform="scale(-1,1)"/>
+  <!-- f-holes -->
+  <g id="fh"><circle cx="29" cy="356" r="4.8"/><path d="M27.5,364 C22,379 36,394 31,410" class="t"/><circle cx="34" cy="417" r="5.6"/><path d="M23.5,385 l6,-1.7 M33,389 l6,-1.7" class="t"/></g>
+  <use href="#fh" transform="scale(-1,1)"/>
+  <!-- fingerboard -->
+  <path d="M-10.5,102 L10.5,102 L15,248 C15,256 -15,256 -15,248 Z"/>
+  <!-- pegbox -->
+  <path d="M-8.5,102 C-9.5,86 -9.5,73 -7.5,60 M8.5,102 C9.5,86 9.5,73 7.5,60"/>
+  <path d="M-9.5,74 h-13 M-9.5,90 h-13 M9.5,82 h13 M9.5,98 h13" class="t"/>
+  <ellipse cx="-25" cy="74" rx="3.5" ry="4.7"/><ellipse cx="-25" cy="90" rx="3.5" ry="4.7"/>
+  <ellipse cx="25" cy="82" rx="3.5" ry="4.7"/><ellipse cx="25" cy="98" rx="3.5" ry="4.7"/>
+  <!-- scroll -->
+  <path d="M-7.5,60 C-11.5,48 -12.5,36 -8.5,29 C-4,22 7.5,22 10.5,29 C13.5,36 11.5,45 7.5,52 C4.5,57 -0.5,58 -2.5,54 C-4.5,50 -2.5,46 0.5,46"/>
+  <circle cx="9.5" cy="31" r="2.7" class="t"/>
+  <!-- strings -->
+  <g class="a"><path d="M-5.2,105 L-11.5,426 M-1.8,105 L-3.9,426 M1.8,105 L3.9,426 M5.2,105 L11.5,426"/></g>
+  <!-- bridge -->
+  <path d="M-16,412 L16,412 L12.5,389 L-12.5,389 Z" class="t"/>
+  <!-- tailpiece -->
+  <path d="M-10,426 C-12,458 -7.5,480 0,488 C7.5,480 12,458 10,426 Z"/>
+  <path d="M0,488 L0,538" class="t"/>
+  <circle cx="0" cy="542" r="3" class="t"/>
+</g>
+</svg>
