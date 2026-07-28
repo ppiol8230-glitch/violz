@@ -144,10 +144,16 @@ h3 { font-size: 22px; }
   min-width: 224px; padding: 10px 0;
   opacity:0; visibility:hidden; pointer-events:none;
   transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
+  transition-delay: .15s; /* grace period before closing */
+}
+.dropdown::before {
+  /* invisible bridge: covers the gap between nav link and panel so hover never breaks */
+  content:""; position:absolute; left:-14px; right:-14px; top:-26px; height:26px;
 }
 .main-nav li:hover .dropdown,
 .main-nav li:focus-within .dropdown {
   opacity:1; visibility:visible; pointer-events:auto; transform: translate(-50%, 0);
+  transition-delay: 0s;
 }
 .dropdown a {
   display:block; padding: 10px 22px; font-size: 14px; color: var(--ink-soft);
