@@ -144,6 +144,16 @@ async function api(req, env, url) {
 const PAGES = new Set(["", "maker", "special", "instruments", "repair", "gallery", "contact"]);
 const ZH_COUNTRIES = new Set(["CN", "HK", "MO", "TW", "SG"]);
 
+/* 검색·SNS 크롤러는 국가 분기에서 제외한다.
+   Googlebot은 대부분 미국에서 크롤링하므로 리다이렉트를 걸면 한국어·중문판이
+   수집되지 않는다. 크롤러에게는 요청한 URL을 그대로 주고, 언어판 관계는
+   각 페이지의 hreflang으로 알린다. */
+const CRAWLER = /(googlebot|google-inspectiontool|bingbot|yeti|daum|duckduckbot|baiduspider|yandex|slurp|applebot|petalbot|bytespider|facebookexternalhit|twitterbot|kakaotalk|telegrambot|whatsapp|linkedinbot|discordbot|gptbot|oai-searchbot|perplexitybot|claudebot|ccbot|amazonbot)/i;
+
+function isCrawler(req) {
+  return CRAWLER.test(req.headers.get("user-agent") || "");
+}
+
 function detectCountry(req) {
   return req.headers.get("cf-ipcountry") || (req.cf && req.cf.country) || "";
 }
@@ -162,6 +172,7 @@ function langRedirect(req, url) {
   if (p.startsWith("/api/") || p.startsWith("/admin")) return null;
   if (p === "/en" || p === "/zh" || p.startsWith("/en/") || p.startsWith("/zh/")) return null;
   if (!(req.headers.get("accept") || "").includes("text/html")) return null;
+  if (isCrawler(req)) return null;
 
   let slug = p.replace(/^\/+|\/+$/g, "");
   if (slug.endsWith(".html")) slug = slug.slice(0, -5);
