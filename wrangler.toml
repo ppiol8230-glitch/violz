@@ -6,6 +6,9 @@ compatibility_date = "2026-07-01"
 directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
+# 페이지 요청은 Worker가 먼저 처리해야 국가별 언어 분기가 동작한다
+# (css/js/img 등 나머지 자산은 그대로 엣지에서 바로 서빙)
+run_worker_first = ["/", "/index.html", "/maker", "/maker.html", "/special", "/special.html", "/instruments", "/instruments.html", "/repair", "/repair.html", "/gallery", "/gallery.html", "/contact", "/contact.html"]
 
 # 갤러리 관리자 저장소 (게시물 + 이미지)
 [[kv_namespaces]]

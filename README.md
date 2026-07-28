@@ -26,6 +26,27 @@ public/
 └─ img/*.svg         자체 제작 라인아트 (violin/viola/cello/spalla/damore/gamba/favicon)
 ```
 
+## 다국어 (한국어 · English · 中文)
+
+```
+public/            한국어 (violz.org/)
+public/en/         English (violz.org/en/)
+public/zh/         简体中文 (violz.org/zh/)
+```
+
+- **페이지는 언어별 실제 정적 파일**이다(클라이언트 번역 아님) → 검색 노출·공유 미리보기가 언어별로 제대로 작동.
+  css/js/img는 루트 하나를 공유하므로 모든 경로는 **절대경로**(`/css/style.css`, `/img/...`)여야 한다.
+- **국가 자동 분기**(`src/index.js`의 `pickLang`): 쿠키 `violz_lang` > 접속 국가.
+  KR·미확인 → 한국어 / CN·HK·MO·TW·SG → 中文 / 그 외 → English.
+  한국어는 리다이렉트 없음(루트가 곧 한국어), 나머지는 302로 `/en/`·`/zh/`.
+- **사용자가 헤더에서 KO·EN·中文을 직접 고르면** `violz_lang` 쿠키(1년)가 저장돼 이후 자동 분기를 덮어쓴다.
+- ⚠️ `wrangler.toml`의 **`run_worker_first`** 목록에 페이지 경로가 들어 있어야 분기가 동작한다.
+  (없으면 정적 자산이 Worker보다 먼저 응답해 Worker가 아예 실행되지 않음 — 삽질 1회)
+- 감지 상태 확인: `GET /api/geo` → `{country, lang}`.
+- 페이지를 새로 추가하면: `src/index.js`의 `PAGES`, `wrangler.toml`의 `run_worker_first`,
+  `public/sitemap.xml`, 그리고 각 페이지의 hreflang·언어 전환 링크를 함께 갱신할 것.
+- 갤러리 관리자(`/admin`)와 관리자가 올린 게시물 본문은 한국어 그대로다(번역 대상 아님).
+
 ## 갤러리 관리자 (사진·글 업로드)
 
 - 관리 페이지: **`/admin.html`** (메뉴에 노출 안 됨, robots 차단). 비밀번호 로그인 → 사진+글 게시/삭제.

@@ -56,6 +56,14 @@
     });
   });
 
+  /* language switcher: remember the visitor's own choice for a year */
+  document.querySelectorAll("[data-lang]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      document.cookie = "violz_lang=" + a.getAttribute("data-lang") +
+        "; path=/; max-age=31536000; samesite=lax";
+    });
+  });
+
   /* footer year */
   document.querySelectorAll(".js-year").forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

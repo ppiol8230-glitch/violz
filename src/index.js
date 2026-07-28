@@ -69,6 +69,15 @@ async function api(req, env, url) {
     });
   }
 
+  if (p === "/api/geo" && req.method === "GET") {
+    return json({
+      country: detectCountry(req),
+      cfCountry: (req.cf && req.cf.country) || null,
+      header: req.headers.get("cf-ipcountry"),
+      lang: pickLang(req),
+    });
+  }
+
   if (p === "/api/login" && req.method === "POST") {
     if (!secret) return json({ error: "ADMIN_PASSWORD 시크릿이 아직 설정되지 않았습니다. Cloudflare 대시보드에서 설정해 주세요." }, 503);
     const { password } = await req.json();
@@ -127,6 +136,51 @@ async function api(req, env, url) {
   return json({ error: "not found" }, 404);
 }
 
+/* ─────────────── language routing ───────────────
+   ko = /  ·  en = /en/  ·  zh = /zh/
+   First visit: decide by visitor country (KR→ko, Chinese-speaking→zh, else→en).
+   Once the visitor picks a language in the header, the violz_lang cookie wins. */
+
+const PAGES = new Set(["", "maker", "special", "instruments", "repair", "gallery", "contact"]);
+const ZH_COUNTRIES = new Set(["CN", "HK", "MO", "TW", "SG"]);
+
+function detectCountry(req) {
+  return req.headers.get("cf-ipcountry") || (req.cf && req.cf.country) || "";
+}
+
+function pickLang(req) {
+  const m = /(?:^|;\s*)violz_lang=(ko|en|zh)/.exec(req.headers.get("cookie") || "");
+  if (m) return m[1];
+  const c = detectCountry(req);
+  if (!c || c === "KR" || c === "T1" || c === "XX") return "ko";
+  if (ZH_COUNTRIES.has(c)) return "zh";
+  return "en";
+}
+
+function langRedirect(req, url) {
+  const p = url.pathname;
+  if (p.startsWith("/api/") || p.startsWith("/admin")) return null;
+  if (p === "/en" || p === "/zh" || p.startsWith("/en/") || p.startsWith("/zh/")) return null;
+  if (!(req.headers.get("accept") || "").includes("text/html")) return null;
+
+  let slug = p.replace(/^\/+|\/+$/g, "");
+  if (slug.endsWith(".html")) slug = slug.slice(0, -5);
+  if (slug === "index") slug = "";
+  if (!PAGES.has(slug)) return null;
+
+  const lang = pickLang(req);
+  if (lang === "ko") return null;
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      location: url.origin + "/" + lang + "/" + slug + url.search,
+      "cache-control": "no-store",
+      vary: "Cookie",
+    },
+  });
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -137,6 +191,8 @@ export default {
         return json({ error: "서버 오류: " + (e && e.message ? e.message : String(e)) }, 500);
       }
     }
+    const redirect = langRedirect(req, url);
+    if (redirect) return redirect;
     return env.ASSETS.fetch(req);
   },
 };

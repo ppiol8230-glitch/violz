@@ -7,4 +7,20 @@
   <url><loc>https://violz.org/repair</loc></url>
   <url><loc>https://violz.org/gallery</loc></url>
   <url><loc>https://violz.org/contact</loc></url>
+
+  <url><loc>https://violz.org/en/</loc></url>
+  <url><loc>https://violz.org/en/special</loc></url>
+  <url><loc>https://violz.org/en/instruments</loc></url>
+  <url><loc>https://violz.org/en/maker</loc></url>
+  <url><loc>https://violz.org/en/repair</loc></url>
+  <url><loc>https://violz.org/en/gallery</loc></url>
+  <url><loc>https://violz.org/en/contact</loc></url>
+
+  <url><loc>https://violz.org/zh/</loc></url>
+  <url><loc>https://violz.org/zh/special</loc></url>
+  <url><loc>https://violz.org/zh/instruments</loc></url>
+  <url><loc>https://violz.org/zh/maker</loc></url>
+  <url><loc>https://violz.org/zh/repair</loc></url>
+  <url><loc>https://violz.org/zh/gallery</loc></url>
+  <url><loc>https://violz.org/zh/contact</loc></url>
 </urlset>

@@ -10,20 +10,24 @@
 <meta property="og:description" content="수원에서, 잊힌 현악기를 만듭니다 — 비올론첼로 다 스팔라 · 비올라 다모레 · 비올족. 제작자 전경수.">
 <meta property="og:site_name" content="VIOLZ">
 <link rel="canonical" href="https://violz.org/">
+<link rel="alternate" hreflang="ko" href="https://violz.org/">
+<link rel="alternate" hreflang="en" href="https://violz.org/en/">
+<link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/">
+<link rel="alternate" hreflang="x-default" href="https://violz.org/en/">
 <meta property="og:url" content="https://violz.org/">
 <meta property="og:image" content="https://violz.org/img/maker.jpg">
-<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <!-- ================= HEADER ================= -->
 <header class="site-header">
   <div class="header-in">
-    <a class="brand" href="index.html" aria-label="비올즈 현악기 공방 홈">
+    <a class="brand" href="/" aria-label="비올즈 현악기 공방 홈">
       <svg viewBox="0 0 64 64" aria-hidden="true">
         <circle cx="32" cy="32" r="30" fill="none" stroke="#c3a06a" stroke-width="1.6"/>
         <circle cx="32" cy="32" r="25.5" fill="none" stroke="#e5d5b8" stroke-width="1"/>
@@ -36,18 +40,23 @@
     </a>
     <button class="nav-toggle" aria-label="메뉴" aria-expanded="false"><span></span><span></span><span></span></button>
     <ul class="main-nav">
-      <li><a class="nav-link" href="maker.html">제작자</a></li>
+      <li><a class="nav-link" href="/maker">제작자</a></li>
       <li>
-        <a class="nav-link" href="special.html">악기<i class="caret"></i></a>
+        <a class="nav-link" href="/special">악기<i class="caret"></i></a>
         <div class="dropdown">
-          <a href="special.html">고악기 — 다 스팔라 · 다모레 · 비올<span class="dd-en">Early Strings</span></a>
-          <a href="instruments.html">바이올린 · 비올라 · 첼로<span class="dd-en">Violin · Viola · Cello</span></a>
+          <a href="/special">고악기 — 다 스팔라 · 다모레 · 비올<span class="dd-en">Early Strings</span></a>
+          <a href="/instruments">바이올린 · 비올라 · 첼로<span class="dd-en">Violin · Viola · Cello</span></a>
         </div>
       </li>
-      <li><a class="nav-link" href="repair.html">평생 관리</a></li>
-      <li><a class="nav-link" href="gallery.html">갤러리</a></li>
-      <li><a class="nav-link" href="contact.html">문의</a></li>
-      <li><a class="nav-cta" href="contact.html">공방 방문</a></li>
+      <li><a class="nav-link" href="/repair">평생 관리</a></li>
+      <li><a class="nav-link" href="/gallery">갤러리</a></li>
+      <li><a class="nav-link" href="/contact">문의</a></li>
+      <li><a class="nav-cta" href="/contact">공방 방문</a></li>
+      <li class="lang-sw" aria-label="Language">
+        <a href="/" data-lang="ko" class="on">KO</a>
+        <a href="/en/" data-lang="en">EN</a>
+        <a href="/zh/" data-lang="zh">中文</a>
+      </li>
     </ul>
   </div>
 </header>
@@ -65,7 +74,7 @@
         열여섯 해째, 한 번에 한 대씩 — 서두르지 않고 만들고 있습니다.
       </p>
       <div class="hero-actions rv in d3">
-        <a class="more" href="special.html">공방의 악기들</a>
+        <a class="more" href="/special">공방의 악기들</a>
       </div>
     </div>
     <div class="hero-art">
@@ -137,7 +146,7 @@
     </div>
     <div class="inst-grid">
       <article class="inst-card rv">
-        <div class="art"><img src="img/spalla.svg" alt="비올론첼로 다 스팔라 라인 드로잉"></div>
+        <div class="art"><img src="/img/spalla.svg" alt="비올론첼로 다 스팔라 라인 드로잉"></div>
         <h3>비올론첼로 다 스팔라</h3>
         <span class="en-sub">Violoncello da spalla</span>
         <p>
@@ -145,10 +154,10 @@
           가슴에 밀착되어 저음의 진동이 연주자의 몸을 그대로 타고 흐릅니다.
           바이올린의 운지로 첼로의 음역을 노래하는, 국내에서는 아직 낯선 악기입니다.
         </p>
-        <a class="more" href="special.html#spalla">더 읽기</a>
+        <a class="more" href="/special#spalla">더 읽기</a>
       </article>
       <article class="inst-card rv d1">
-        <div class="art"><img src="img/damore.svg" alt="비올라 다모레 라인 드로잉"></div>
+        <div class="art"><img src="/img/damore.svg" alt="비올라 다모레 라인 드로잉"></div>
         <h3>비올라 다모레</h3>
         <span class="en-sub">Viola d'amore</span>
         <p>
@@ -156,10 +165,10 @@
           그 잔향은 악기 안에 작은 성당을 품은 소리라 불립니다.
           눈을 가린 아모르 조각과 불꽃 사운드홀 — 악기이자 하나의 조각품입니다.
         </p>
-        <a class="more" href="special.html#damore">더 읽기</a>
+        <a class="more" href="/special#damore">더 읽기</a>
       </article>
       <article class="inst-card rv d2">
-        <div class="art"><img src="img/gamba.svg" alt="비올라 다 감바 라인 드로잉"></div>
+        <div class="art"><img src="/img/gamba.svg" alt="비올라 다 감바 라인 드로잉"></div>
         <h3>비올족 — 비올라 다 감바</h3>
         <span class="en-sub">Viols · Viola da gamba</span>
         <p>
@@ -167,7 +176,7 @@
           찌르는 화려함 대신 친밀하고 따뜻한 울림을 지녔습니다.
           트레블부터 베이스까지 한 가족을 이루는 악기라, 콘소트(합주) 세트로도 만듭니다.
         </p>
-        <a class="more" href="special.html#gamba">더 읽기</a>
+        <a class="more" href="/special#gamba">더 읽기</a>
       </article>
     </div>
   </div>
@@ -179,7 +188,7 @@
     <div class="split">
       <figure class="frame rv">
         <div class="frame-in">
-          <img class="real" src="img/maker.jpg" alt="공방 작업대에서 악기를 다듬는 제작자 전경수">
+          <img class="real" src="/img/maker.jpg" alt="공방 작업대에서 악기를 다듬는 제작자 전경수">
         </div>
         <figcaption>공방에서 — 제작자 전경수 <span class="en">JUN KYUNGSOO</span></figcaption>
       </figure>
@@ -200,7 +209,7 @@
           <span class="name">전경수</span>
           <span class="en-name">Jun Kyungsoo — Luthier, Atelier VIOLZ</span>
         </div>
-        <a class="more rv d3" href="maker.html" style="margin-top:26px; display:inline-flex">제작자 이야기</a>
+        <a class="more rv d3" href="/maker" style="margin-top:26px; display:inline-flex">제작자 이야기</a>
       </div>
     </div>
   </div>
@@ -265,25 +274,25 @@
     </div>
     <div class="inst-grid">
       <article class="inst-card rv">
-        <div class="art"><img src="img/violin.svg" alt="바이올린 라인 드로잉"></div>
+        <div class="art"><img src="/img/violin.svg" alt="바이올린 라인 드로잉"></div>
         <h3>바이올린</h3>
         <span class="en-sub">Violin</span>
         <p>스트라디바리 · 과르네리 모델 기반. 원작의 수치를 존중해, 해가 갈수록 깊어지는 소리를 향해 만듭니다.</p>
-        <a class="more" href="instruments.html#violin">더 읽기</a>
+        <a class="more" href="/instruments#violin">더 읽기</a>
       </article>
       <article class="inst-card rv d1">
-        <div class="art"><img src="img/viola.svg" alt="비올라 라인 드로잉"></div>
+        <div class="art"><img src="/img/viola.svg" alt="비올라 라인 드로잉"></div>
         <h3>비올라</h3>
         <span class="en-sub">Viola</span>
         <p>공방 이름 VIOLZ의 뿌리가 된 악기. 연주자의 체격에 맞는 사이즈로 설계해 편안함과 C현의 깊은 울림을 함께 담습니다.</p>
-        <a class="more" href="instruments.html#viola">더 읽기</a>
+        <a class="more" href="/instruments#viola">더 읽기</a>
       </article>
       <article class="inst-card rv d2">
-        <div class="art"><img src="img/cello.svg" alt="첼로 라인 드로잉"></div>
+        <div class="art"><img src="/img/cello.svg" alt="첼로 라인 드로잉"></div>
         <h3>첼로</h3>
         <span class="en-sub">Cello</span>
         <p>사람의 목소리에 가장 가까운 악기. 넓은 판에서도 두께의 흐름을 지켜, 저음의 기둥과 노래하는 고음을 함께 담습니다.</p>
-        <a class="more" href="instruments.html#cello">더 읽기</a>
+        <a class="more" href="/instruments#cello">더 읽기</a>
       </article>
     </div>
   </div>
@@ -301,11 +310,11 @@
           주문 제작에 들일 시간을 지키기 위해서입니다. 대신 공방에서 나간 악기는
           계절마다의 셋업 조정부터 세월이 남긴 손상의 복원까지, 계속 돌봅니다.
         </p>
-        <a class="more rv d3" href="repair.html" style="margin-top:26px; display:inline-flex">관리에 대하여</a>
+        <a class="more rv d3" href="/repair" style="margin-top:26px; display:inline-flex">관리에 대하여</a>
       </div>
       <figure class="frame rv d1">
         <div class="frame-in wide">
-          <img src="img/cello.svg" alt="" style="height:70%; width:auto; opacity:.55">
+          <img src="/img/cello.svg" alt="" style="height:70%; width:auto; opacity:.55">
           <span class="ph-note">Workshop Photo · Coming Soon</span>
         </div>
         <figcaption>작업대 위의 시간</figcaption>
@@ -323,7 +332,7 @@
       악기를 맞추고 싶은 분도, 소리가 궁금한 분도, 그냥 구경하고 싶은 분도 —
       어떤 이유든 좋습니다. 오시기 전에 연락 한 번만 주세요.
     </p>
-    <a class="btn ghost rv d2" href="contact.html"><span>문의 · 오시는 길</span><span class="arr">→</span></a>
+    <a class="btn ghost rv d2" href="/contact"><span>문의 · 오시는 길</span><span class="arr">→</span></a>
   </div>
 </section>
 
@@ -345,11 +354,11 @@
       <div class="foot-col">
         <h5>Atelier</h5>
         <ul>
-          <li><a href="maker.html">제작자 전경수</a></li>
-          <li><a href="special.html">고악기 — 전문 제작</a></li>
-          <li><a href="instruments.html">바이올린 · 비올라 · 첼로</a></li>
-          <li><a href="repair.html">평생 관리</a></li>
-          <li><a href="gallery.html">갤러리</a></li>
+          <li><a href="/maker">제작자 전경수</a></li>
+          <li><a href="/special">고악기 — 전문 제작</a></li>
+          <li><a href="/instruments">바이올린 · 비올라 · 첼로</a></li>
+          <li><a href="/repair">평생 관리</a></li>
+          <li><a href="/gallery">갤러리</a></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -357,7 +366,7 @@
         <ul>
           <li class="f-static">경기도 수원시 정조로 579, 2층 202호</li>
           <li class="f-static">010-4332-2665 · fiddle@kakao.com</li>
-          <li><a href="contact.html">상담 예약 · 오시는 길</a></li>
+          <li><a href="/contact">상담 예약 · 오시는 길</a></li>
           <li><a href="https://www.instagram.com/viols_strings" target="_blank" rel="noopener">Instagram — @viols_strings</a></li>
         </ul>
       </div>
@@ -369,6 +378,6 @@
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
