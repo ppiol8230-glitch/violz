@@ -515,6 +515,23 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 }
 .play-badge svg { height:20px; width:auto; opacity:1 !important; margin-left:4px; }
 
+/* ---------- gallery posts (admin-uploaded) ---------- */
+
+.post { border-top: 1px solid var(--line-soft); padding: 46px 0; }
+.post:last-child { border-bottom: 1px solid var(--line-soft); }
+.post-head { display:flex; align-items:baseline; gap: 16px; flex-wrap:wrap; margin-bottom: 12px; }
+.post-head h3 { font-size: 21px; }
+.post-date { font-family: var(--serif-en); color: var(--mut); font-size: 13px; letter-spacing: .1em; }
+.post-body { max-width: 720px; color: var(--ink-soft); margin-bottom: 24px; }
+.post-imgs { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.post-imgs img {
+  width:100%; aspect-ratio: 4/3; object-fit: cover;
+  border: 1px solid var(--line); background:#fff; padding: 6px;
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.post-imgs a:hover img { transform: translateY(-4px); box-shadow: 0 22px 40px -24px rgba(40,30,15,.3); }
+@media (max-width: 720px) { .post-imgs { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+
 /* ---------- maker page ---------- */
 
 .maker-hero { padding: 180px 0 90px; }

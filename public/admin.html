@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>갤러리 관리 | 비올즈 VIOLZ</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .adm-wrap { max-width: 760px; margin: 0 auto; padding: 140px 28px 90px; }
+  .adm-card { border:1px solid var(--line); background:#fff; padding: 40px 38px; box-shadow: 0 30px 60px -34px rgba(40,30,15,.18); }
+  .adm-card + .adm-card { margin-top: 26px; }
+  .adm-h { font-family: var(--serif-ko); font-size: 24px; color: var(--ink); margin-bottom: 6px; }
+  .adm-sub { font-size: 13.5px; color: var(--mut); margin-bottom: 26px; }
+  .adm-field { margin-bottom: 18px; }
+  .adm-field label { display:block; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color: var(--amber); margin-bottom:8px; }
+  .adm-field input[type=text], .adm-field input[type=password], .adm-field textarea {
+    width:100%; border:1px solid var(--line); background:var(--paper-warm); padding:13px 16px;
+    font: inherit; color: var(--ink); outline:none; transition: border-color .3s;
+  }
+  .adm-field input:focus, .adm-field textarea:focus { border-color: var(--gold); background:#fff; }
+  .adm-field textarea { min-height: 140px; resize: vertical; line-height:1.8; }
+  .adm-btn {
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:14px; font-weight:500; letter-spacing:.06em;
+    padding: 13px 30px; border:1px solid var(--ink); color:#fff; background: var(--ink);
+    cursor:pointer; transition: opacity .3s;
+  }
+  .adm-btn:hover { opacity:.85; }
+  .adm-btn[disabled] { opacity:.4; cursor:default; }
+  .adm-btn.line { background:transparent; color:var(--ink-soft); border-color:var(--line); }
+  .adm-msg { margin-top:16px; font-size:13.5px; }
+  .adm-msg.err { color:#b3402a; }
+  .adm-msg.ok { color:#3a7d44; }
+  .thumbs { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  .thumbs .th { position:relative; width:92px; height:92px; border:1px solid var(--line); background:#fff; padding:4px; }
+  .thumbs .th img { width:100%; height:100%; object-fit:cover; }
+  .thumbs .th button { position:absolute; top:-9px; right:-9px; width:22px; height:22px; border-radius:50%;
+    background:var(--ink); color:#fff; font-size:12px; line-height:1; cursor:pointer; }
+  .adm-post { display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+    padding:18px 0; border-top:1px solid var(--line-soft); }
+  .adm-post:last-child { border-bottom:1px solid var(--line-soft); }
+  .adm-post .t { font-weight:500; color:var(--ink); }
+  .adm-post .d { font-size:12.5px; color:var(--mut); }
+  .adm-post .del { color:#b3402a; font-size:13px; border-bottom:1px solid transparent; cursor:pointer; }
+  .adm-post .del:hover { border-color:#b3402a; }
+  .adm-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
+  .adm-top a { font-size:13.5px; color:var(--mut); }
+  .adm-top a:hover { color: var(--amber-deep); }
+</style>
+</head>
+<body>
+
+<div class="adm-wrap">
+  <div class="adm-top">
+    <a class="brand" href="index.html" style="gap:10px">
+      <svg viewBox="0 0 64 64" style="height:34px" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#c3a06a" stroke-width="1.6"/>
+        <g fill="none" stroke="#262019" stroke-width="2" stroke-linecap="round">
+          <g id="bfh"><circle cx="25" cy="22.5" r="2.4"/><path d="M23.9,26.5 C20.5,32.5 29,38.5 25.6,44.5"/><circle cx="27.6" cy="47" r="2.8"/></g>
+          <use href="#bfh" transform="matrix(-1,0,0,1,64,0)"/>
+        </g>
+      </svg>
+      <span class="brand-txt"><span class="b1" style="font-size:17px">VIOLZ</span><span class="b2">갤러리 관리</span></span>
+    </a>
+    <span><a href="gallery.html">갤러리 보기</a> &nbsp;·&nbsp; <a href="#" id="logout" hidden>로그아웃</a></span>
+  </div>
+
+  <!-- login -->
+  <div class="adm-card" id="login-card" hidden>
+    <div class="adm-h">관리자 로그인</div>
+    <div class="adm-sub">공방 갤러리에 사진과 글을 올리는 페이지입니다.</div>
+    <form id="login-form">
+      <div class="adm-field">
+        <label for="pw">Password</label>
+        <input type="password" id="pw" autocomplete="current-password" required>
+      </div>
+      <button class="adm-btn" type="submit">로그인</button>
+      <div class="adm-msg err" id="login-msg"></div>
+    </form>
+  </div>
+
+  <!-- composer -->
+  <div class="adm-card" id="composer" hidden>
+    <div class="adm-h">새 게시물</div>
+    <div class="adm-sub">사진은 여러 장 선택할 수 있고, 업로드 전에 자동으로 줄여집니다(최대 1600px).</div>
+    <div class="adm-field">
+      <label for="title">제목</label>
+      <input type="text" id="title" placeholder="예: 비올라 다모레 — 바니시 작업">
+    </div>
+    <div class="adm-field">
+      <label for="body">내용 (선택)</label>
+      <textarea id="body" placeholder="사진에 곁들일 이야기를 적어 주세요."></textarea>
+    </div>
+    <div class="adm-field">
+      <label for="files">사진</label>
+      <input type="file" id="files" accept="image/*" multiple>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <button class="adm-btn" id="publish">게시하기</button>
+    <div class="adm-msg" id="pub-msg"></div>
+  </div>
+
+  <!-- existing posts -->
+  <div class="adm-card" id="list-card" hidden>
+    <div class="adm-h">게시물 관리</div>
+    <div class="adm-sub" id="list-sub">게시된 글이 여기에 표시됩니다.</div>
+    <div id="post-list"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var TOKEN_KEY = "violz_admin_token";
+  var $ = function (id) { return document.getElementById(id); };
+  var token = localStorage.getItem(TOKEN_KEY) || "";
+  var pending = []; // [{dataUrl}]
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function authFetch(url, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({}, opts.headers, { authorization: "Bearer " + token });
+    return fetch(url, opts);
+  }
+
+  function show(loggedIn) {
+    $("login-card").hidden = loggedIn;
+    $("composer").hidden = !loggedIn;
+    $("list-card").hidden = !loggedIn;
+    $("logout").hidden = !loggedIn;
+    if (loggedIn) loadPosts();
+  }
+
+  /* ---- session check ---- */
+  if (token) {
+    authFetch("/api/whoami").then(function (r) { show(r.ok); if (!r.ok) localStorage.removeItem(TOKEN_KEY); })
+      .catch(function () { show(false); });
+  } else { show(false); }
+
+  /* ---- login ---- */
+  $("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    $("login-msg").textContent = "";
+    fetch("/api/login", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ password: $("pw").value }),
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) { $("login-msg").textContent = res.d.error || "로그인 실패"; return; }
+        token = res.d.token; localStorage.setItem(TOKEN_KEY, token);
+        $("pw").value = ""; show(true);
+      })
+      .catch(function () { $("login-msg").textContent = "서버에 연결할 수 없습니다."; });
+  });
+
+  $("logout").addEventListener("click", function (e) {
+    e.preventDefault(); token = ""; localStorage.removeItem(TOKEN_KEY); show(false);
+  });
+
+  /* ---- image pick + resize ---- */
+  function fileToDataUrl(file) {
+    return createImageBitmap(file).then(function (bmp) {
+      var max = 1600, w = bmp.width, h = bmp.height;
+      if (Math.max(w, h) > max) { var s = max / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+      var c = document.createElement("canvas"); c.width = w; c.height = h;
+      c.getContext("2d").drawImage(bmp, 0, 0, w, h);
+      return c.toDataURL("image/jpeg", 0.85);
+    }).catch(function () {
+      return new Promise(function (res, rej) {
+        var r = new FileReader();
+        r.onload = function () { res(r.result); };
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    });
+  }
+
+  function renderThumbs() {
+    $("thumbs").innerHTML = pending.map(function (p, i) {
+      return '<span class="th"><img src="' + p + '" alt=""><button type="button" data-i="' + i + '" aria-label="사진 제거">×</button></span>';
+    }).join("");
+  }
+
+  $("files").addEventListener("change", function () {
+    var files = [].slice.call(this.files || []);
+    this.value = "";
+    Promise.all(files.map(fileToDataUrl)).then(function (urls) {
+      pending = pending.concat(urls).slice(0, 12);
+      renderThumbs();
+    });
+  });
+
+  $("thumbs").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    pending.splice(+b.dataset.i, 1); renderThumbs();
+  });
+
+  /* ---- publish ---- */
+  $("publish").addEventListener("click", function () {
+    var title = $("title").value.trim(), body = $("body").value.trim();
+    var msg = $("pub-msg");
+    msg.className = "adm-msg"; msg.textContent = "";
+    if (!title && !body && !pending.length) { msg.className = "adm-msg err"; msg.textContent = "제목, 내용, 사진 중 하나는 있어야 합니다."; return; }
+    $("publish").disabled = true; msg.textContent = "올리는 중…";
+    authFetch("/api/posts", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ title: title, body: body, images: pending }),
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        $("publish").disabled = false;
+        if (!res.ok) { msg.className = "adm-msg err"; msg.textContent = res.d.error || "실패했습니다."; return; }
+        msg.className = "adm-msg ok"; msg.textContent = "게시되었습니다.";
+        $("title").value = ""; $("body").value = ""; pending = []; renderThumbs(); loadPosts();
+      })
+      .catch(function () { $("publish").disabled = false; msg.className = "adm-msg err"; msg.textContent = "서버에 연결할 수 없습니다."; });
+  });
+
+  /* ---- list + delete ---- */
+  function loadPosts() {
+    fetch("/api/posts").then(function (r) { return r.json(); }).then(function (d) {
+      var posts = d.posts || [];
+      $("list-sub").textContent = posts.length ? "총 " + posts.length + "건" : "아직 게시물이 없습니다.";
+      $("post-list").innerHTML = posts.map(function (p) {
+        return '<div class="adm-post"><div><div class="t">' + esc(p.title || "무제") + "</div>" +
+          '<div class="d">' + (p.created || "").slice(0, 10) + " · 사진 " + (p.images || []).length + "장</div></div>" +
+          '<span class="del" data-id="' + p.id + '">삭제</span></div>';
+      }).join("");
+    });
+  }
+
+  $("post-list").addEventListener("click", function (e) {
+    var d = e.target.closest(".del"); if (!d) return;
+    if (!confirm("이 게시물을 삭제할까요? 사진도 함께 지워집니다.")) return;
+    authFetch("/api/posts/" + d.dataset.id, { method: "DELETE" }).then(function (r) {
+      if (r.ok) loadPosts(); else alert("삭제에 실패했습니다.");
+    });
+  });
+})();
+</script>
+</body>
+</html>

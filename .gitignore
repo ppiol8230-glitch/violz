@@ -6,3 +6,4 @@ Thumbs.db
 *.log
 .env
 .dev.vars
+wrangler.local.toml

@@ -59,7 +59,18 @@
   </div>
 </section>
 
-<section class="sec">
+<!-- 관리자 게시물 (admin.html에서 올린 사진·글) -->
+<section class="sec" id="notes-sec" hidden>
+  <div class="container">
+    <div class="sec-head">
+      <p class="overline">Workshop Notes · 공방의 기록</p>
+      <h2 class="sec-title">악기와 공방</h2>
+    </div>
+    <div id="notes"></div>
+  </div>
+</section>
+
+<section class="sec" id="ph-photos">
   <div class="container">
     <div class="sec-head">
       <p class="overline rv">Photographs · 사진</p>
@@ -171,5 +182,36 @@
 </footer>
 
 <script src="js/main.js"></script>
+<script>
+/* 관리자 게시물 로드 — 게시물이 있으면 '공방의 기록'을 보이고 자리표시 그리드를 숨김 */
+(function () {
+  "use strict";
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  fetch("/api/posts")
+    .then(function (r) { return r.ok ? r.json() : { posts: [] }; })
+    .then(function (d) {
+      var posts = d.posts || [];
+      if (!posts.length) return;
+      document.getElementById("ph-photos").hidden = true;
+      document.getElementById("notes-sec").hidden = false;
+      document.getElementById("notes").innerHTML = posts.map(function (p) {
+        var imgs = (p.images || []).map(function (k) {
+          return '<a href="/api/img/' + k + '" target="_blank" rel="noopener"><img loading="lazy" src="/api/img/' + k + '" alt="' + esc(p.title || "") + '"></a>';
+        }).join("");
+        return '<article class="post">' +
+          '<div class="post-head"><h3>' + esc(p.title || "무제") + '</h3>' +
+          '<span class="post-date">' + (p.created || "").slice(0, 10) + "</span></div>" +
+          (p.body ? '<p class="post-body">' + esc(p.body).replace(/\n/g, "<br>") + "</p>" : "") +
+          (imgs ? '<div class="post-imgs">' + imgs + "</div>" : "") +
+          "</article>";
+      }).join("");
+    })
+    .catch(function () { /* API 미연결(정적 서빙) 시 조용히 무시 */ });
+})();
+</script>
 </body>
 </html>

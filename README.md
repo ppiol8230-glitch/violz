@@ -25,6 +25,31 @@ public/
 └─ img/*.svg         자체 제작 라인아트 (violin/viola/cello/spalla/damore/gamba/favicon)
 ```
 
+## 갤러리 관리자 (사진·글 업로드)
+
+- 관리 페이지: **`/admin.html`** (메뉴에 노출 안 됨, robots 차단). 비밀번호 로그인 → 사진+글 게시/삭제.
+- 백엔드: `src/index.js` (Worker) — `/api/*` 처리, 나머지는 정적 서빙. 데이터는 **KV**에 저장
+  (게시물 목록 `posts` + 이미지 `img:<uuid>`, 사진은 업로드 전 브라우저에서 1600px로 리사이즈).
+- 갤러리(`gallery.html`)는 게시물이 1건 이상이면 자동으로 "공방의 기록" 섹션을 표시하고
+  자리표시 그리드를 숨긴다. 게시물이 없으면 기존 그대로.
+
+### 활성화 (Cloudflare 대시보드, 1회)
+
+1. **KV 생성**: Storage & Databases → KV → Create namespace → 이름 `violz-gallery` → ID 복사
+2. `wrangler.toml`의 `[[kv_namespaces]]` 주석 해제 + ID 붙여넣기 → push
+3. **비밀번호 설정**: Workers & Pages → violz → Settings → Variables and Secrets →
+   **Add secret** → 이름 `ADMIN_PASSWORD`, 값 = 원하는 관리자 비밀번호
+4. `https://<도메인>/admin.html` 접속 → 로그인 → 게시
+
+연결 전에는 사이트가 기존과 동일하게 동작한다(갤러리 API는 빈 목록 반환).
+
+### 로컬 테스트
+
+```bash
+npx wrangler dev -c wrangler.local.toml --port 8790
+```
+`wrangler.local.toml`(git 미포함)이 로컬 KV 시뮬레이터를 쓰고, 비밀번호는 `.dev.vars`의 `ADMIN_PASSWORD`.
+
 ## 실제 콘텐츠로 교체할 자리 (TODO)
 
 1. **사진**: `.frame` 안의 `<img src="img/*.svg">` + "Photo · Coming Soon"을 실제 사진으로 교체
