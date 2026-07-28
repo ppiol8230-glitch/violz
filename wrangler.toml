@@ -7,12 +7,9 @@ directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
 
-# ── 갤러리 관리자 기능을 켜려면 아래 2단계가 필요합니다 ──────────────
-# 1) Cloudflare 대시보드 → Storage & Databases → KV → "violz-gallery" 네임스페이스 생성
-#    → 생성된 ID를 아래에 넣고 주석(#) 해제 후 push
-# [[kv_namespaces]]
-# binding = "GALLERY_KV"
-# id = "여기에_네임스페이스_ID"
-#
-# 2) 대시보드 → Workers & Pages → violz → Settings → Variables and Secrets
-#    → Secret 추가: 이름 ADMIN_PASSWORD / 값 = 관리자 비밀번호
+# 갤러리 관리자 저장소 (게시물 + 이미지)
+[[kv_namespaces]]
+binding = "GALLERY_KV"
+id = "332581da02f941d1abc89f47ea3cc477"
+
+# 관리자 비밀번호는 대시보드 Secret(ADMIN_PASSWORD)으로 설정됨
