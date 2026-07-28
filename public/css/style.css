@@ -421,6 +421,16 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   background:#fff;
 }
 
+/* ---------- youtube embed ---------- */
+
+.yt {
+  position:relative; aspect-ratio:16/9;
+  background:#0e0c0a; border:1px solid var(--line);
+  box-shadow: 0 24px 48px -28px rgba(40,30,15,.25);
+}
+.yt iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+.yt-cap { margin-top:10px; font-size:12.5px; color:var(--mut); letter-spacing:.04em; }
+
 /* ---------- process ---------- */
 
 .proc { display:grid; grid-template-columns: repeat(4,1fr); gap: 40px; counter-reset: step; }
