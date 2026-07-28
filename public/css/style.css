@@ -433,6 +433,24 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 .proc-item h4 { margin: 34px 0 10px; font-size: 17.5px; }
 .proc-item p { font-size: 14px; color: var(--mut); line-height:1.8; }
 
+/* ---------- manifesto ---------- */
+
+.manifesto { text-align:center; }
+.manifesto p {
+  font-family: var(--serif-ko);
+  font-size: clamp(16.5px, 1.9vw, 19.5px);
+  line-height: 2.05;
+  color: var(--ink-soft);
+  max-width: 760px;
+  margin: 0 auto;
+}
+.manifesto p + p { margin-top: 24px; }
+.manifesto em { font-style: normal; color: var(--amber-deep); }
+.manifesto .mf-close {
+  margin-top: 34px; font-family: var(--serif-ko); font-weight:600; color: var(--ink);
+  font-size: clamp(18px, 2.2vw, 22px);
+}
+
 /* ---------- quote band ---------- */
 
 .quote-band { text-align:center; padding: 120px 0; position:relative; }
