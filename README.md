@@ -4,6 +4,7 @@
 제작자 **전경수(JUN KYUNGSOO)** — 바이올린·비올라·첼로 제작, 그리고
 **비올론첼로 다 스팔라 · 비올라 다모레 · 비올라 다 감바** 전문 제작 + 수리·복원.
 
+- **라이브: https://violz.org** (Cloudflare Workers 커스텀 도메인 · `violz.hspatrick.workers.dev`도 유효, www는 미설정)
 - 순수 정적 사이트 (빌드 없음): HTML + CSS + Vanilla JS, 모든 일러스트는 자체 제작 SVG
 - 배포: GitHub `main` push → Cloudflare (Workers Builds 또는 Pages) 자동 배포
 - 배포 대상 파일은 **전부 `public/` 안에** 있어야 함 (`wrangler.toml`의 `[assets] directory=./public`)
