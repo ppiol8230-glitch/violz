@@ -493,6 +493,9 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   color: var(--ink-soft);
   max-width: 760px;
   margin: 0 auto;
+  /* 가운데 정렬은 양쪽이 들쭉날쭉해 보여서, 본문은 양끝을 맞춘다 */
+  text-align: justify;
+  text-wrap: initial;
 }
 .manifesto p + p { margin-top: 24px; }
 .manifesto em { font-style: normal; color: var(--amber-deep); }
