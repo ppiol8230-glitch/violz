@@ -1,26 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://violz.org/</loc></url>
-  <url><loc>https://violz.org/special</loc></url>
-  <url><loc>https://violz.org/instruments</loc></url>
-  <url><loc>https://violz.org/maker</loc></url>
-  <url><loc>https://violz.org/repair</loc></url>
-  <url><loc>https://violz.org/gallery</loc></url>
-  <url><loc>https://violz.org/contact</loc></url>
+<!-- 언어판 관계(hreflang)는 각 페이지의 <link rel="alternate">에도 들어 있다.
+     여기 xhtml:link는 같은 내용을 사이트맵에서도 알려 수집을 앞당기려는 것.
+     x-default = 영어판(한국어·중국어권이 아닌 방문자는 워커가 /en/으로 보낸다). -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <url><loc>https://violz.org/en/</loc></url>
-  <url><loc>https://violz.org/en/special</loc></url>
-  <url><loc>https://violz.org/en/instruments</loc></url>
-  <url><loc>https://violz.org/en/maker</loc></url>
-  <url><loc>https://violz.org/en/repair</loc></url>
-  <url><loc>https://violz.org/en/gallery</loc></url>
-  <url><loc>https://violz.org/en/contact</loc></url>
+  <url>
+    <loc>https://violz.org/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/"/>
+  </url>
+  <url>
+    <loc>https://violz.org/special</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/special"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/special"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/special"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/special"/>
+  </url>
+  <url>
+    <loc>https://violz.org/instruments</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/instruments"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/instruments"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/instruments"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/instruments"/>
+  </url>
+  <url>
+    <loc>https://violz.org/maker</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/maker"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/maker"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/maker"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/maker"/>
+  </url>
+  <url>
+    <loc>https://violz.org/repair</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/repair"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/repair"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/repair"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/repair"/>
+  </url>
+  <url>
+    <loc>https://violz.org/gallery</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/gallery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/gallery"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/gallery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/gallery"/>
+  </url>
+  <url>
+    <loc>https://violz.org/contact</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/contact"/>
+  </url>
 
-  <url><loc>https://violz.org/zh/</loc></url>
-  <url><loc>https://violz.org/zh/special</loc></url>
-  <url><loc>https://violz.org/zh/instruments</loc></url>
-  <url><loc>https://violz.org/zh/maker</loc></url>
-  <url><loc>https://violz.org/zh/repair</loc></url>
-  <url><loc>https://violz.org/zh/gallery</loc></url>
-  <url><loc>https://violz.org/zh/contact</loc></url>
+  <url>
+    <loc>https://violz.org/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/"/>
+  </url>
+  <url>
+    <loc>https://violz.org/en/special</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/special"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/special"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/special"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/special"/>
+  </url>
+  <url>
+    <loc>https://violz.org/en/instruments</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/instruments"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/instruments"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/instruments"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/instruments"/>
+  </url>
+  <url>
+    <loc>https://violz.org/en/maker</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/maker"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/maker"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/maker"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/maker"/>
+  </url>
+  <url>
+    <loc>https://violz.org/en/repair</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/repair"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/repair"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/repair"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/repair"/>
+  </url>
+  <url>
+    <loc>https://violz.org/en/gallery</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/gallery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/gallery"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/gallery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/gallery"/>
+  </url>
+  <url>
+    <loc>https://violz.org/en/contact</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/contact"/>
+  </url>
+
+  <url>
+    <loc>https://violz.org/zh/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/"/>
+  </url>
+  <url>
+    <loc>https://violz.org/zh/special</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/special"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/special"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/special"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/special"/>
+  </url>
+  <url>
+    <loc>https://violz.org/zh/instruments</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/instruments"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/instruments"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/instruments"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/instruments"/>
+  </url>
+  <url>
+    <loc>https://violz.org/zh/maker</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/maker"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/maker"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/maker"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/maker"/>
+  </url>
+  <url>
+    <loc>https://violz.org/zh/repair</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/repair"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/repair"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/repair"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/repair"/>
+  </url>
+  <url>
+    <loc>https://violz.org/zh/gallery</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/gallery"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/gallery"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/gallery"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/gallery"/>
+  </url>
+  <url>
+    <loc>https://violz.org/zh/contact</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://violz.org/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://violz.org/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://violz.org/zh/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://violz.org/en/contact"/>
+  </url>
 </urlset>
