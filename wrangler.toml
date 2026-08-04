@@ -16,3 +16,10 @@ binding = "GALLERY_KV"
 id = "332581da02f941d1abc89f47ea3cc477"
 
 # 관리자 비밀번호는 대시보드 Secret(ADMIN_PASSWORD)으로 설정됨
+
+# Workers Logs — 대시보드·MCP로 로그 조회 (보존 7일)
+[observability]
+enabled = true
+
+[observability.logs]
+invocation_logs = true
