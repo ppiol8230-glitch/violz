@@ -476,16 +476,13 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 }
 
 .spalla-gallery {
-  display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:170px;
-  gap:14px; margin-top:42px;
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:14px; margin-top:42px; align-items:start;
 }
-.spalla-front { grid-column:1 / 5; grid-row:1 / 4; }
-.spalla-back { grid-column:5 / 9; grid-row:1 / 4; }
-.spalla-detail-one { grid-column:9 / 13; grid-row:1; }
-.spalla-detail-three { grid-column:9 / 13; grid-row:2 / 4; }
-.spalla-front img, .spalla-back img { object-position:center; }
-.spalla-detail-one img { object-position:50% 31%; }
-.spalla-detail-three img { object-fit:contain; object-position:center top; }
+.spalla-gallery .atelier-photo { grid-column:auto; grid-row:auto; }
+.spalla-gallery .atelier-photo img {
+  width:100%; height:auto; object-fit:contain; object-position:center;
+}
 
 .workshop-journal { margin-top:92px; }
 .home-journal .workshop-journal { margin-top:0; }
@@ -939,7 +936,7 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   .contact-grid { grid-template-columns: 1fr; }
   .split { grid-template-columns: 1fr; gap: 44px; }
   .foot-grid { grid-template-columns: 1fr 1fr; }
-  .spalla-gallery { grid-auto-rows:150px; }
+  .spalla-gallery { grid-template-columns:repeat(2,1fr); }
   .journal-grid { grid-template-rows:240px 310px; }
 }
 
@@ -1008,13 +1005,9 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   .photo-manifesto::before { background:rgba(250,248,244,.86); }
   .spalla-showcase { margin-top:70px; padding-top:54px; }
   .spalla-gallery {
-    grid-template-columns:1fr 1fr; grid-auto-rows:155px;
+    grid-template-columns:1fr 1fr;
     gap:9px; margin-top:32px;
   }
-  .spalla-front { grid-column:1; grid-row:1 / 3; }
-  .spalla-back { grid-column:2; grid-row:1 / 3; }
-  .spalla-detail-one { grid-column:1 / 3; grid-row:3; }
-  .spalla-detail-three { grid-column:1 / 3; grid-row:4 / 6; }
   .atelier-photo figcaption { left:8px; bottom:8px; padding:4px 8px; font-size:10.5px; }
   .workshop-journal { margin-top:68px; }
   .journal-head { margin-bottom:30px; }
