@@ -478,12 +478,10 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 .spalla-front { grid-column:1 / 5; grid-row:1 / 4; }
 .spalla-back { grid-column:5 / 9; grid-row:1 / 4; }
 .spalla-detail-one { grid-column:9 / 13; grid-row:1; }
-.spalla-detail-two { grid-column:9 / 13; grid-row:2; }
-.spalla-detail-three { grid-column:9 / 13; grid-row:3; }
+.spalla-detail-three { grid-column:9 / 13; grid-row:2 / 4; }
 .spalla-front img, .spalla-back img { object-position:center; }
 .spalla-detail-one img { object-position:50% 31%; }
-.spalla-detail-two img { object-position:50% 24%; }
-.spalla-detail-three img { object-position:50% 13%; }
+.spalla-detail-three img { object-fit:contain; object-position:center top; }
 
 .workshop-journal { margin-top:92px; }
 .journal-head { margin-bottom:42px; }
@@ -853,9 +851,8 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   }
   .spalla-front { grid-column:1; grid-row:1 / 3; }
   .spalla-back { grid-column:2; grid-row:1 / 3; }
-  .spalla-detail-one { grid-column:1; grid-row:3; }
-  .spalla-detail-two { grid-column:2; grid-row:3; }
-  .spalla-detail-three { grid-column:1 / 3; grid-row:4; }
+  .spalla-detail-one { grid-column:1 / 3; grid-row:3; }
+  .spalla-detail-three { grid-column:1 / 3; grid-row:4 / 6; }
   .atelier-photo figcaption { left:8px; bottom:8px; padding:4px 8px; font-size:10.5px; }
   .workshop-journal { margin-top:68px; }
   .journal-head { margin-bottom:30px; }
