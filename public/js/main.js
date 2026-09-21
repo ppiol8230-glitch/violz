@@ -64,6 +64,123 @@
     });
   });
 
+  /* atelier music: autoplay where allowed, otherwise begin on the first gesture */
+  var music = document.createElement("audio");
+  var musicToggle = document.createElement("button");
+  var musicMutedKey = "violz_music_muted";
+  var musicTimeKey = "violz_music_time";
+  var language = (document.documentElement.lang || "ko").toLowerCase();
+  var musicLabels = language.indexOf("en") === 0
+    ? { on: "Turn music off", off: "Play music" }
+    : language.indexOf("zh") === 0
+      ? { on: "关闭音乐", off: "播放音乐" }
+      : { on: "음악 끄기", off: "음악 켜기" };
+
+  function readMusicSetting(key) {
+    try { return window.sessionStorage.getItem(key); }
+    catch (error) { return null; }
+  }
+
+  function saveMusicSetting(key, value) {
+    try { window.sessionStorage.setItem(key, value); }
+    catch (error) { /* storage may be unavailable in private browsing */ }
+  }
+
+  function renderMusicToggle() {
+    var isPlaying = !music.paused;
+    var label = isPlaying ? musicLabels.on : musicLabels.off;
+    musicToggle.classList.toggle("is-playing", isPlaying);
+    musicToggle.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+    musicToggle.setAttribute("aria-label", label);
+    musicToggle.setAttribute("title", label);
+    musicToggle.innerHTML = '<span class="music-toggle-icon" aria-hidden="true">' +
+      (isPlaying ? "♪" : "♩") + '</span><span class="music-toggle-label">' + label + "</span>";
+  }
+
+  music.src = "/audio/welcome-guide.mp3";
+  music.preload = "auto";
+  music.loop = true;
+  music.autoplay = true;
+  music.playsInline = true;
+  music.volume = 0.5;
+  music.hidden = true;
+  music.setAttribute("aria-hidden", "true");
+
+  musicToggle.type = "button";
+  musicToggle.className = "music-toggle";
+  document.body.appendChild(music);
+  document.body.appendChild(musicToggle);
+  renderMusicToggle();
+
+  var savedMusicTime = Number(readMusicSetting(musicTimeKey));
+  music.addEventListener("loadedmetadata", function () {
+    if (Number.isFinite(savedMusicTime) && savedMusicTime > 0 && music.duration) {
+      music.currentTime = savedMusicTime % music.duration;
+    }
+  }, { once: true });
+
+  function disarmMusicGesture() {
+    document.removeEventListener("pointerdown", unlockMusic, true);
+    document.removeEventListener("touchstart", unlockMusic, true);
+    document.removeEventListener("keydown", unlockMusic, true);
+  }
+
+  function startMusic() {
+    music.volume = 0.5;
+    var result = music.play();
+    if (result && typeof result.then === "function") {
+      return result.then(function () {
+        disarmMusicGesture();
+        renderMusicToggle();
+        return true;
+      }).catch(function () {
+        renderMusicToggle();
+        return false;
+      });
+    }
+    renderMusicToggle();
+    return Promise.resolve(!music.paused);
+  }
+
+  function unlockMusic(event) {
+    if (event.target && event.target.closest && event.target.closest(".music-toggle")) return;
+    if (readMusicSetting(musicMutedKey) === "1") {
+      disarmMusicGesture();
+      return;
+    }
+    startMusic();
+  }
+
+  function armMusicGesture() {
+    document.addEventListener("pointerdown", unlockMusic, true);
+    document.addEventListener("touchstart", unlockMusic, true);
+    document.addEventListener("keydown", unlockMusic, true);
+  }
+
+  music.addEventListener("play", renderMusicToggle);
+  music.addEventListener("pause", renderMusicToggle);
+  musicToggle.addEventListener("click", function () {
+    if (music.paused) {
+      saveMusicSetting(musicMutedKey, "0");
+      startMusic();
+    } else {
+      music.pause();
+      saveMusicSetting(musicMutedKey, "1");
+    }
+  });
+
+  window.addEventListener("pagehide", function () {
+    if (Number.isFinite(music.currentTime)) {
+      saveMusicSetting(musicTimeKey, String(music.currentTime));
+    }
+  });
+
+  if (readMusicSetting(musicMutedKey) !== "1") {
+    startMusic().then(function (started) {
+      if (!started) armMusicGesture();
+    });
+  }
+
   /* footer year */
   document.querySelectorAll(".js-year").forEach(function (el) {
     el.textContent = String(new Date().getFullYear());

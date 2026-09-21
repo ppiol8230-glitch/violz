@@ -905,6 +905,31 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 }
 .foot-base .en { letter-spacing:.14em; }
 
+/* ---------- atelier music ---------- */
+
+.music-toggle {
+  position:fixed; right:20px; bottom:20px; z-index:95;
+  display:flex; align-items:center; gap:9px;
+  min-height:42px; padding:9px 15px 9px 11px;
+  border:1px solid rgba(155,105,52,.25); border-radius:999px;
+  background:rgba(255,253,249,.9); color:var(--ink-soft);
+  box-shadow:0 8px 28px rgba(57,42,28,.1);
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  font:500 11px/1 var(--sans); letter-spacing:.08em;
+  cursor:pointer; transition:color .25s, border-color .25s, background .25s, transform .25s;
+}
+.music-toggle:hover {
+  color:var(--amber-deep); border-color:rgba(155,105,52,.48);
+  background:rgba(255,253,249,.98); transform:translateY(-2px);
+}
+.music-toggle:focus-visible { outline:2px solid var(--amber); outline-offset:3px; }
+.music-toggle-icon {
+  display:grid; place-items:center; width:23px; height:23px;
+  border:1px solid rgba(155,105,52,.28); border-radius:50%;
+  color:var(--amber-deep); font:16px/1 Georgia,serif;
+}
+.music-toggle.is-playing .music-toggle-icon { background:var(--amber-deep); color:#fff; }
+
 /* ---------- reveal on scroll ---------- */
 
 .rv { opacity:0; transform: translateY(26px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
@@ -1020,4 +1045,6 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   .career-list { margin-top: 32px; }
   .career-list li { grid-template-columns: 48px 1fr; gap: 14px; padding: 18px 0; }
   .career-list p { font-size: 15.5px; }
+  .music-toggle { right:12px; bottom:12px; min-height:40px; padding:8px; }
+  .music-toggle-label { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 }
