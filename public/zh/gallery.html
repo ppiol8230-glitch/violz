@@ -73,11 +73,11 @@
 <!-- 管理员发布的内容（由 admin.html 上传的照片与文字） -->
 <section class="sec" id="notes-sec" hidden>
   <div class="container">
-    <div class="sec-head">
+    <div class="sec-head" id="notes-head">
       <p class="overline">Workshop Notes</p>
       <h2 class="sec-title">乐器与工作室</h2>
     </div>
-    <div id="notes"></div>
+    <div id="notes" aria-live="polite"></div>
   </div>
 </section>
 
@@ -193,36 +193,6 @@
 </footer>
 
 <script src="/js/main.js"></script>
-<script>
-/* 加载管理员发布的内容 — 有内容时显示「工作室的记录」并隐藏占位网格 */
-(function () {
-  "use strict";
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  }
-  fetch("/api/posts")
-    .then(function (r) { return r.ok ? r.json() : { posts: [] }; })
-    .then(function (d) {
-      var posts = d.posts || [];
-      if (!posts.length) return;
-      document.getElementById("ph-photos").hidden = true;
-      document.getElementById("notes-sec").hidden = false;
-      document.getElementById("notes").innerHTML = posts.map(function (p) {
-        var imgs = (p.images || []).map(function (k) {
-          return '<a href="/api/img/' + k + '" target="_blank" rel="noopener"><img loading="lazy" src="/api/img/' + k + '" alt="' + esc(p.title || "无题") + '"></a>';
-        }).join("");
-        return '<article class="post">' +
-          '<div class="post-head"><h3>' + esc(p.title || "无题") + '</h3>' +
-          '<span class="post-date">' + (p.created || "").slice(0, 10) + "</span></div>" +
-          (p.body ? '<p class="post-body">' + esc(p.body).replace(/\n/g, "<br>") + "</p>" : "") +
-          (imgs ? '<div class="post-imgs">' + imgs + "</div>" : "") +
-          "</article>";
-      }).join("");
-    })
-    .catch(function () { /* API 未连接（静态托管）时静默忽略 */ });
-})();
-</script>
+<script src="/js/gallery.js" data-lang="zh" data-base="/zh/gallery"></script>
 </body>
 </html>
