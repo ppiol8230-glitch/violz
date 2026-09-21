@@ -97,12 +97,13 @@
       (isPlaying ? "♪" : "♩") + '</span><span class="music-toggle-label">' + label + "</span>";
   }
 
-  music.src = "/audio/welcome-guide.mp3";
+  /* The file itself is attenuated so iOS, which can ignore element volume, stays quiet. */
+  music.src = "/audio/welcome-guide-quiet.m4a";
   music.preload = "auto";
   music.loop = true;
   music.autoplay = true;
   music.playsInline = true;
-  music.volume = 0.1;
+  music.volume = 1;
   music.hidden = true;
   music.setAttribute("aria-hidden", "true");
 
@@ -126,7 +127,7 @@
   }
 
   function startMusic() {
-    music.volume = 0.1;
+    music.volume = 1;
     var result = music.play();
     if (result && typeof result.then === "function") {
       return result.then(function () {
