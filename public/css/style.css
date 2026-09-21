@@ -354,6 +354,7 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 /* ---------- home: intro ---------- */
 
 .split { display:grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items:center; }
+.split > * { min-width:0; }
 .split .txt .overline { margin-bottom: 20px; }
 .split .txt h2 { font-size: clamp(28px,3.4vw,38px); margin-bottom: 24px; }
 .split .txt p + p { margin-top: 16px; }
