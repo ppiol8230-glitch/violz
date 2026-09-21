@@ -68,4 +68,42 @@
   document.querySelectorAll(".js-year").forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
   });
+
+  /* contact form: send through the Worker and keep the visitor's address as Reply-To */
+  document.querySelectorAll("[data-contact-form]").forEach(function (form) {
+    var submit = form.querySelector("[type=submit]");
+    var status = form.querySelector(".form-status");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      status.className = "form-status";
+      status.textContent = form.dataset.sending;
+      submit.disabled = true;
+
+      var data = Object.fromEntries(new FormData(form).entries());
+      data.language = form.dataset.lang || "ko";
+
+      try {
+        var response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        var result = await response.json().catch(function () { return {}; });
+        if (!response.ok || !result.ok) throw new Error(result.error || "send_failed");
+        form.reset();
+        status.className = "form-status success";
+        status.textContent = form.dataset.success;
+      } catch (error) {
+        status.className = "form-status error";
+        status.textContent = error.message === "rate_limited"
+          ? form.dataset.rateLimit
+          : form.dataset.error;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  });
 })();

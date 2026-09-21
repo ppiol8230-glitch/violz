@@ -5,10 +5,13 @@
  *   ASSETS          : static assets (public/)
  *   GALLERY_KV      : KV namespace  — posts metadata + image blobs
  *   ADMIN_PASSWORD  : secret        — admin login password
+ *   CONTACT_EMAIL   : Email Sending binding
+ *   CONTACT_TO      : secret        — private contact recipient
  *
  * API:
  *   GET    /api/posts        public   → { posts:[{id,title,body,images[],created}] }
  *   GET    /api/img/<key>    public   → image bytes
+ *   POST   /api/contact      public   → send a workshop enquiry
  *   POST   /api/login        public   → { token }   (body: {password})
  *   GET    /api/whoami       auth     → { ok }
  *   POST   /api/posts        auth     → { ok, id }  (body: {title, body, images:[dataURL]})
@@ -44,6 +47,107 @@ function json(o, status = 200) {
   });
 }
 
+function cleanLine(value, max) {
+  return String(value || "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+async function contactRateLimited(req, kv) {
+  if (!kv) return false;
+  const ip = req.headers.get("cf-connecting-ip") || "unknown";
+  const hash = await crypto.subtle.digest("SHA-256", enc.encode("violz-contact:" + ip));
+  const key = "contact-rate:" + [...new Uint8Array(hash)]
+    .slice(0, 12)
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+  const count = Number((await kv.get(key)) || "0");
+  if (count >= 5) return true;
+  await kv.put(key, String(count + 1), { expirationTtl: 3600 });
+  return false;
+}
+
+async function sendContact(req, env, kv) {
+  const origin = req.headers.get("origin");
+  if (origin) {
+    let host = "";
+    try { host = new URL(origin).hostname; } catch (_) { return json({ error: "invalid_origin" }, 403); }
+    if (host !== "violz.org" && host !== "www.violz.org" && host !== "localhost" && host !== "127.0.0.1")
+      return json({ error: "invalid_origin" }, 403);
+  }
+
+  const length = Number(req.headers.get("content-length") || "0");
+  if (length > 32 * 1024) return json({ error: "too_large" }, 413);
+
+  let data;
+  try { data = await req.json(); } catch (_) { return json({ error: "invalid_request" }, 400); }
+
+  // Hidden field: bots usually fill it, people never see it.
+  if (cleanLine(data.company, 100)) return json({ ok: true });
+
+  const name = cleanLine(data.name, 80);
+  const email = cleanLine(data.email, 254).toLowerCase();
+  const phone = cleanLine(data.phone, 50);
+  const topic = cleanLine(data.topic, 100);
+  const message = String(data.message || "").trim().slice(0, 5000);
+  const language = ["ko", "en", "zh"].includes(data.language) ? data.language : "ko";
+
+  if (!name || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return json({ error: "invalid_fields" }, 400);
+  if (await contactRateLimited(req, kv)) return json({ error: "rate_limited" }, 429);
+  if (!env.CONTACT_EMAIL || !env.CONTACT_TO)
+    return json({ error: "mail_unavailable" }, 503);
+
+  const sentAt = new Date().toISOString();
+  const subject = `[VIOLZ 웹사이트 문의] ${topic || "일반 문의"} — ${name}`;
+  const text = [
+    "VIOLZ 웹사이트에서 새 문의가 도착했습니다.",
+    "이 메일에 답장하면 문의자의 이메일로 바로 전송됩니다.",
+    "",
+    `이름: ${name}`,
+    `이메일: ${email}`,
+    `전화번호: ${phone || "미입력"}`,
+    `문의 유형: ${topic || "일반 문의"}`,
+    `페이지 언어: ${language}`,
+    `접수 시각: ${sentAt}`,
+    "",
+    "문의 내용",
+    message,
+  ].join("\n");
+  const html = `
+    <div style="font-family:Arial,'Noto Sans KR',sans-serif;color:#29241e;line-height:1.7;max-width:680px;margin:auto">
+      <p style="font-size:12px;letter-spacing:.22em;color:#9c6a38">VIOLZ WEBSITE ENQUIRY</p>
+      <h1 style="font-family:Georgia,serif;font-size:26px;font-weight:normal">새 문의가 도착했습니다</h1>
+      <p style="color:#756d62">이 메일에 답장하면 문의자의 이메일로 바로 전송됩니다.</p>
+      <table style="width:100%;border-collapse:collapse;margin:28px 0">
+        <tr><td style="padding:10px 0;border-top:1px solid #e9e3d8;color:#9c6a38;width:120px">이름</td><td style="padding:10px 0;border-top:1px solid #e9e3d8">${escapeHtml(name)}</td></tr>
+        <tr><td style="padding:10px 0;border-top:1px solid #e9e3d8;color:#9c6a38">이메일</td><td style="padding:10px 0;border-top:1px solid #e9e3d8">${escapeHtml(email)}</td></tr>
+        <tr><td style="padding:10px 0;border-top:1px solid #e9e3d8;color:#9c6a38">전화번호</td><td style="padding:10px 0;border-top:1px solid #e9e3d8">${escapeHtml(phone || "미입력")}</td></tr>
+        <tr><td style="padding:10px 0;border-top:1px solid #e9e3d8;color:#9c6a38">문의 유형</td><td style="padding:10px 0;border-top:1px solid #e9e3d8">${escapeHtml(topic || "일반 문의")}</td></tr>
+        <tr><td style="padding:10px 0;border-top:1px solid #e9e3d8;color:#9c6a38">페이지 언어</td><td style="padding:10px 0;border-top:1px solid #e9e3d8">${escapeHtml(language)}</td></tr>
+      </table>
+      <div style="padding:22px;background:#faf8f4;border-left:2px solid #c3a06a;white-space:pre-wrap">${escapeHtml(message)}</div>
+      <p style="margin-top:24px;font-size:12px;color:#857c6f">접수 시각: ${escapeHtml(sentAt)}</p>
+    </div>`;
+
+  await env.CONTACT_EMAIL.send({
+    from: { email: "contact@violz.org", name: "VIOLZ Website" },
+    to: env.CONTACT_TO,
+    replyTo: email,
+    subject,
+    text,
+    html,
+  });
+  return json({ ok: true });
+}
+
 async function api(req, env, url) {
   const kv = env.GALLERY_KV;
   const secret = env.ADMIN_PASSWORD;
@@ -76,6 +180,10 @@ async function api(req, env, url) {
       header: req.headers.get("cf-ipcountry"),
       lang: pickLang(req),
     });
+  }
+
+  if (p === "/api/contact" && req.method === "POST") {
+    return sendContact(req, env, kv);
   }
 
   if (p === "/api/login" && req.method === "POST") {
