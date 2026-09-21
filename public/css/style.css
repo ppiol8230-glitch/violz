@@ -445,6 +445,9 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
   margin-top: 96px; padding-top: 70px;
   border-top: 1px solid var(--line);
 }
+.home-spalla .spalla-showcase {
+  margin-top:0; padding-top:0; border-top:0;
+}
 .showcase-head, .journal-head { max-width: 720px; }
 .showcase-head .overline, .journal-head .overline { margin-bottom: 18px; }
 .showcase-head h3, .journal-head h3 {
@@ -484,6 +487,7 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
 .spalla-detail-three img { object-fit:contain; object-position:center top; }
 
 .workshop-journal { margin-top:92px; }
+.home-journal .workshop-journal { margin-top:0; }
 .journal-head { margin-bottom:42px; }
 .journal-grid {
   display:grid; grid-template-columns:repeat(12,1fr);
