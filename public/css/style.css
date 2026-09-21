@@ -969,9 +969,24 @@ body.menu-open .nav-toggle span:nth-child(3){ top:22px; transform:rotate(-45deg)
    six items plus the language switcher need the room */
 @media (max-width: 920px) {
   .nav-toggle { display:block; }
+  body.menu-open { overflow:hidden; }
+  body.menu-open::before {
+    content:""; position:fixed; inset:0; z-index:99;
+    background:var(--paper);
+  }
+  body.menu-open .site-header {
+    background:var(--paper);
+    border-bottom-color:transparent;
+    box-shadow:none;
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
   .main-nav {
     position: fixed; inset: 0; z-index:120;
-    background: rgba(255,255,255,.98);
+    min-height:100vh; min-height:100dvh;
+    padding:calc(82px + env(safe-area-inset-top)) 28px calc(28px + env(safe-area-inset-bottom));
+    overflow-y:auto; overscroll-behavior:contain;
+    background:var(--paper);
     flex-direction: column; justify-content:center; align-items:center; gap: 8px;
     opacity:0; visibility:hidden; transition: opacity .4s var(--ease), visibility .4s;
   }
