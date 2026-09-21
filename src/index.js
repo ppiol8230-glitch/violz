@@ -192,6 +192,35 @@ function langRedirect(req, url) {
   });
 }
 
+const ADMIN_ALIAS = /^\/(?:ko\/|en\/|zh\/)?admin(?:\.html)?\/?$/i;
+
+async function adminPage(req, env, url) {
+  if (!ADMIN_ALIAS.test(url.pathname)) return null;
+
+  if (url.pathname !== "/admin") {
+    const target = new URL("/admin", url.origin);
+    target.search = url.search;
+    return new Response(null, {
+      status: 308,
+      headers: {
+        location: target.toString(),
+        "cache-control": "no-store",
+        "x-robots-tag": "noindex, nofollow",
+      },
+    });
+  }
+
+  const response = await env.ASSETS.fetch(req);
+  const headers = new Headers(response.headers);
+  headers.set("cache-control", "no-store");
+  headers.set("x-robots-tag", "noindex, nofollow");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -202,6 +231,8 @@ export default {
         return json({ error: "서버 오류: " + (e && e.message ? e.message : String(e)) }, 500);
       }
     }
+    const admin = await adminPage(req, env, url);
+    if (admin) return admin;
     const redirect = langRedirect(req, url);
     if (redirect) return redirect;
     return env.ASSETS.fetch(req);
