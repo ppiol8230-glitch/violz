@@ -15,6 +15,7 @@
  *   POST   /api/login        public   → { token }   (body: {password})
  *   GET    /api/whoami       auth     → { ok }
  *   POST   /api/posts        auth     → { ok, id }  (body: {title, body, images:[dataURL]})
+ *   PATCH  /api/posts/<id>   auth     → { ok }      (edit text and image order)
  *   DELETE /api/posts/<id>   auth     → { ok }
  */
 
@@ -148,6 +149,17 @@ async function sendContact(req, env, kv) {
   return json({ ok: true });
 }
 
+async function storeGalleryImage(kv, item) {
+  const dataUrl = typeof item === "string" ? item : item && item.dataUrl;
+  const m = /^data:(image\/[a-z0-9.+-]+);base64,(.+)$/s.exec(dataUrl || "");
+  if (!m) return null;
+  const bin = Uint8Array.from(atob(m[2]), c => c.charCodeAt(0));
+  if (bin.byteLength > 8 * 1024 * 1024) return null;
+  const key = crypto.randomUUID();
+  await kv.put("img:" + key, bin.buffer, { metadata: { ct: m[1] } });
+  return key;
+}
+
 async function api(req, env, url) {
   const kv = env.GALLERY_KV;
   const secret = env.ADMIN_PASSWORD;
@@ -207,14 +219,9 @@ async function api(req, env, url) {
     const { title, body, images } = await req.json();
     const id = crypto.randomUUID();
     const imgKeys = [];
-    for (const dataUrl of (Array.isArray(images) ? images : []).slice(0, 12)) {
-      const m = /^data:(image\/[a-z0-9.+-]+);base64,(.+)$/s.exec(dataUrl || "");
-      if (!m) continue;
-      const bin = Uint8Array.from(atob(m[2]), c => c.charCodeAt(0));
-      if (bin.byteLength > 8 * 1024 * 1024) continue; // 8MB safety cap per image
-      const key = crypto.randomUUID();
-      await kv.put("img:" + key, bin.buffer, { metadata: { ct: m[1] } });
-      imgKeys.push(key);
+    for (const item of (Array.isArray(images) ? images : []).slice(0, 12)) {
+      const key = await storeGalleryImage(kv, item);
+      if (key) imgKeys.push(key);
     }
     if (!imgKeys.length && !(body || "").trim() && !(title || "").trim())
       return json({ error: "내용이 비어 있습니다." }, 400);
@@ -230,10 +237,50 @@ async function api(req, env, url) {
     return json({ ok: true, id });
   }
 
-  const del = /^\/api\/posts\/([\w-]+)$/.exec(p);
-  if (del && req.method === "DELETE") {
+  const postMatch = /^\/api\/posts\/([\w-]+)$/.exec(p);
+  if (postMatch && req.method === "PATCH") {
     const posts = JSON.parse((await kv.get("posts")) || "[]");
-    const idx = posts.findIndex(x => x.id === del[1]);
+    const idx = posts.findIndex(x => x.id === postMatch[1]);
+    if (idx < 0) return json({ error: "게시물을 찾을 수 없습니다." }, 404);
+
+    const { title, body, images } = await req.json();
+    const oldKeys = Array.isArray(posts[idx].images) ? posts[idx].images : [];
+    const allowed = new Set(oldKeys);
+    const imgKeys = [];
+
+    for (const item of (Array.isArray(images) ? images : []).slice(0, 12)) {
+      const existingKey = item && typeof item === "object" ? String(item.key || "") : "";
+      if (existingKey && allowed.has(existingKey) && !imgKeys.includes(existingKey)) {
+        imgKeys.push(existingKey);
+        continue;
+      }
+      const newKey = await storeGalleryImage(kv, item);
+      if (newKey) imgKeys.push(newKey);
+    }
+
+    const nextTitle = String(title || "").trim().slice(0, 200);
+    const nextBody = String(body || "").trim().slice(0, 8000);
+    if (!imgKeys.length && !nextBody && !nextTitle)
+      return json({ error: "내용이 비어 있습니다." }, 400);
+
+    posts[idx] = {
+      ...posts[idx],
+      title: nextTitle,
+      body: nextBody,
+      images: imgKeys,
+      updated: new Date().toISOString(),
+    };
+    await kv.put("posts", JSON.stringify(posts));
+
+    for (const key of oldKeys) {
+      if (!imgKeys.includes(key)) await kv.delete("img:" + key);
+    }
+    return json({ ok: true });
+  }
+
+  if (postMatch && req.method === "DELETE") {
+    const posts = JSON.parse((await kv.get("posts")) || "[]");
+    const idx = posts.findIndex(x => x.id === postMatch[1]);
     if (idx < 0) return json({ error: "게시물을 찾을 수 없습니다." }, 404);
     for (const k of posts[idx].images || []) await kv.delete("img:" + k);
     posts.splice(idx, 1);

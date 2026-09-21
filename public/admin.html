@@ -32,22 +32,42 @@
   }
   .adm-btn:hover { opacity:.85; }
   .adm-btn[disabled] { opacity:.4; cursor:default; }
+  .adm-btn[hidden] { display:none; }
   .adm-btn.line { background:transparent; color:var(--ink-soft); border-color:var(--line); }
   .adm-msg { margin-top:16px; font-size:13.5px; }
   .adm-msg.err { color:#b3402a; }
   .adm-msg.ok { color:#3a7d44; }
-  .thumbs { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-  .thumbs .th { position:relative; width:92px; height:92px; border:1px solid var(--line); background:#fff; padding:4px; }
-  .thumbs .th img { width:100%; height:100%; object-fit:cover; }
-  .thumbs .th button { position:absolute; top:-9px; right:-9px; width:22px; height:22px; border-radius:50%;
-    background:var(--ink); color:#fff; font-size:12px; line-height:1; cursor:pointer; }
+  .thumbs { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
+  .thumbs .th {
+    position:relative; width:112px; height:142px; border:1px solid var(--line); background:#fff;
+    padding:5px 5px 35px; cursor:grab; transition:opacity .2s, border-color .2s, transform .2s;
+  }
+  .thumbs .th:active { cursor:grabbing; }
+  .thumbs .th.dragging { opacity:.35; transform:scale(.96); }
+  .thumbs .th.drag-over { border-color:var(--amber); }
+  .thumbs .th img { width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .thumb-no { position:absolute; left:8px; top:8px; min-width:22px; height:22px; padding:0 6px;
+    display:flex; align-items:center; justify-content:center; background:rgba(33,29,24,.82); color:#fff; font-size:11px; }
+  .thumb-remove { position:absolute; top:-8px; right:-8px; width:24px; height:24px; border-radius:50%;
+    background:var(--ink); color:#fff; font-size:13px; line-height:1; cursor:pointer; }
+  .thumb-moves { position:absolute; left:5px; right:5px; bottom:5px; display:flex; gap:5px; }
+  .thumb-moves button { flex:1; height:25px; border:1px solid var(--line); background:var(--paper-warm);
+    color:var(--ink-soft); cursor:pointer; font-size:13px; line-height:1; }
+  .thumb-moves button:hover:not(:disabled) { border-color:var(--gold); color:var(--amber-deep); }
+  .thumb-moves button:disabled { opacity:.28; cursor:default; }
+  .thumb-help { margin-top:8px; color:var(--mut); font-size:12.5px; }
   .adm-post { display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
     padding:18px 0; border-top:1px solid var(--line-soft); }
   .adm-post:last-child { border-bottom:1px solid var(--line-soft); }
   .adm-post .t { font-weight:500; color:var(--ink); }
   .adm-post .d { font-size:12.5px; color:var(--mut); }
-  .adm-post .del { color:#b3402a; font-size:13px; border-bottom:1px solid transparent; cursor:pointer; }
+  .adm-post-actions { display:flex; gap:14px; flex:none; }
+  .adm-post .edit, .adm-post .del { font-size:13px; border-bottom:1px solid transparent; cursor:pointer; }
+  .adm-post .edit { color:var(--amber-deep); }
+  .adm-post .del { color:#b3402a; }
+  .adm-post .edit:hover { border-color:var(--amber-deep); }
   .adm-post .del:hover { border-color:#b3402a; }
+  .composer-actions { display:flex; gap:10px; align-items:center; }
   .adm-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
   .adm-top a { font-size:13.5px; color:var(--mut); }
   .adm-top a:hover { color: var(--amber-deep); }
@@ -86,8 +106,8 @@
 
   <!-- composer -->
   <div class="adm-card" id="composer" hidden>
-    <div class="adm-h">새 게시물</div>
-    <div class="adm-sub">사진은 여러 장 선택할 수 있고, 업로드 전에 자동으로 줄여집니다(최대 1600px).</div>
+    <div class="adm-h" id="composer-title">새 게시물</div>
+    <div class="adm-sub" id="composer-sub">사진은 여러 장 선택할 수 있고, 업로드 전에 자동으로 줄여집니다(최대 1600px).</div>
     <div class="adm-field">
       <label for="title">제목</label>
       <input type="text" id="title" placeholder="예: 비올라 다모레 — 바니시 작업">
@@ -100,8 +120,12 @@
       <label for="files">사진</label>
       <input type="file" id="files" accept="image/*" multiple>
       <div class="thumbs" id="thumbs"></div>
+      <div class="thumb-help" id="thumb-help" hidden>사진을 끌어서 놓거나, 아래 화살표 버튼으로 순서를 바꿀 수 있습니다. 첫 번째 사진이 갤러리 대표 사진으로 표시됩니다.</div>
     </div>
-    <button class="adm-btn" id="publish">게시하기</button>
+    <div class="composer-actions">
+      <button class="adm-btn" id="publish">게시하기</button>
+      <button class="adm-btn line" id="cancel-edit" type="button" hidden>수정 취소</button>
+    </div>
     <div class="adm-msg" id="pub-msg"></div>
   </div>
 
@@ -119,7 +143,10 @@
   var TOKEN_KEY = "violz_admin_token";
   var $ = function (id) { return document.getElementById(id); };
   var token = localStorage.getItem(TOKEN_KEY) || "";
-  var pending = []; // [{dataUrl}]
+  var pending = []; // [{dataUrl}] or [{key}] — array order is the gallery order
+  var editingId = "";
+  var postsById = {};
+  var dragIndex = -1;
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -131,6 +158,34 @@
     opts = opts || {};
     opts.headers = Object.assign({}, opts.headers, { authorization: "Bearer " + token });
     return fetch(url, opts);
+  }
+
+  function resetComposer() {
+    editingId = "";
+    pending = [];
+    $("title").value = "";
+    $("body").value = "";
+    $("files").value = "";
+    $("composer-title").textContent = "새 게시물";
+    $("composer-sub").textContent = "사진은 여러 장 선택할 수 있고, 업로드 전에 자동으로 줄여집니다(최대 1600px).";
+    $("publish").textContent = "게시하기";
+    $("cancel-edit").hidden = true;
+    renderThumbs();
+  }
+
+  function beginEdit(post) {
+    editingId = post.id;
+    $("title").value = post.title || "";
+    $("body").value = post.body || "";
+    pending = (post.images || []).map(function (key) { return { key: key }; });
+    $("composer-title").textContent = "게시물 수정";
+    $("composer-sub").textContent = "제목과 내용을 고치고, 사진을 끌어서 순서를 바꾸거나 새 사진을 추가할 수 있습니다.";
+    $("publish").textContent = "수정 저장";
+    $("cancel-edit").hidden = false;
+    $("pub-msg").className = "adm-msg";
+    $("pub-msg").textContent = "";
+    renderThumbs();
+    $("composer").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function show(loggedIn) {
@@ -188,22 +243,74 @@
 
   function renderThumbs() {
     $("thumbs").innerHTML = pending.map(function (p, i) {
-      return '<span class="th"><img src="' + p + '" alt=""><button type="button" data-i="' + i + '" aria-label="사진 제거">×</button></span>';
+      var src = p.key ? "/api/img/" + encodeURIComponent(p.key) : p.dataUrl;
+      return '<span class="th" draggable="true" data-i="' + i + '">' +
+        '<img src="' + esc(src) + '" alt="' + (i + 1) + '번째 사진">' +
+        '<span class="thumb-no">' + (i + 1) + '</span>' +
+        '<button class="thumb-remove" type="button" data-action="remove" data-i="' + i + '" aria-label="' + (i + 1) + '번째 사진 제거">×</button>' +
+        '<span class="thumb-moves">' +
+          '<button type="button" data-action="left" data-i="' + i + '" aria-label="' + (i + 1) + '번째 사진을 앞으로 이동"' + (i === 0 ? " disabled" : "") + '>←</button>' +
+          '<button type="button" data-action="right" data-i="' + i + '" aria-label="' + (i + 1) + '번째 사진을 뒤로 이동"' + (i === pending.length - 1 ? " disabled" : "") + '>→</button>' +
+        '</span></span>';
     }).join("");
+    $("thumb-help").hidden = !pending.length;
   }
 
   $("files").addEventListener("change", function () {
     var files = [].slice.call(this.files || []);
     this.value = "";
     Promise.all(files.map(fileToDataUrl)).then(function (urls) {
-      pending = pending.concat(urls).slice(0, 12);
+      pending = pending.concat(urls.map(function (url) { return { dataUrl: url }; })).slice(0, 12);
       renderThumbs();
     });
   });
 
   $("thumbs").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
-    pending.splice(+b.dataset.i, 1); renderThumbs();
+    var i = +b.dataset.i;
+    if (b.dataset.action === "remove") pending.splice(i, 1);
+    if (b.dataset.action === "left" && i > 0) {
+      var left = pending[i - 1]; pending[i - 1] = pending[i]; pending[i] = left;
+    }
+    if (b.dataset.action === "right" && i < pending.length - 1) {
+      var right = pending[i + 1]; pending[i + 1] = pending[i]; pending[i] = right;
+    }
+    renderThumbs();
+  });
+
+  $("thumbs").addEventListener("dragstart", function (e) {
+    var th = e.target.closest(".th"); if (!th) return;
+    dragIndex = +th.dataset.i;
+    th.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+  });
+
+  $("thumbs").addEventListener("dragover", function (e) {
+    var th = e.target.closest(".th"); if (!th) return;
+    e.preventDefault();
+    $("thumbs").querySelectorAll(".drag-over").forEach(function (el) { el.classList.remove("drag-over"); });
+    th.classList.add("drag-over");
+  });
+
+  $("thumbs").addEventListener("drop", function (e) {
+    var th = e.target.closest(".th"); if (!th || dragIndex < 0) return;
+    e.preventDefault();
+    var targetIndex = +th.dataset.i;
+    var moved = pending.splice(dragIndex, 1)[0];
+    pending.splice(targetIndex, 0, moved);
+    dragIndex = -1;
+    renderThumbs();
+  });
+
+  $("thumbs").addEventListener("dragend", function () {
+    dragIndex = -1;
+    renderThumbs();
+  });
+
+  $("cancel-edit").addEventListener("click", function () {
+    resetComposer();
+    $("pub-msg").className = "adm-msg";
+    $("pub-msg").textContent = "수정을 취소했습니다.";
   });
 
   /* ---- publish ---- */
@@ -212,35 +319,44 @@
     var msg = $("pub-msg");
     msg.className = "adm-msg"; msg.textContent = "";
     if (!title && !body && !pending.length) { msg.className = "adm-msg err"; msg.textContent = "제목, 내용, 사진 중 하나는 있어야 합니다."; return; }
-    $("publish").disabled = true; msg.textContent = "올리는 중…";
-    authFetch("/api/posts", {
-      method: "POST",
+    $("publish").disabled = true; msg.textContent = editingId ? "수정하는 중…" : "올리는 중…";
+    authFetch(editingId ? "/api/posts/" + editingId : "/api/posts", {
+      method: editingId ? "PATCH" : "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ title: title, body: body, images: pending }),
+      body: JSON.stringify({
+        title: title,
+        body: body,
+        images: pending.map(function (p) { return p.key ? { key: p.key } : { dataUrl: p.dataUrl }; }),
+      }),
     }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (res) {
         $("publish").disabled = false;
         if (!res.ok) { msg.className = "adm-msg err"; msg.textContent = res.d.error || "실패했습니다."; return; }
-        msg.className = "adm-msg ok"; msg.textContent = "게시되었습니다.";
-        $("title").value = ""; $("body").value = ""; pending = []; renderThumbs(); loadPosts();
+        msg.className = "adm-msg ok"; msg.textContent = editingId ? "수정되었습니다." : "게시되었습니다.";
+        resetComposer(); loadPosts();
       })
       .catch(function () { $("publish").disabled = false; msg.className = "adm-msg err"; msg.textContent = "서버에 연결할 수 없습니다."; });
   });
 
-  /* ---- list + delete ---- */
+  /* ---- list + edit + delete ---- */
   function loadPosts() {
     fetch("/api/posts").then(function (r) { return r.json(); }).then(function (d) {
       var posts = d.posts || [];
+      postsById = {};
+      posts.forEach(function (p) { postsById[p.id] = p; });
       $("list-sub").textContent = posts.length ? "총 " + posts.length + "건" : "아직 게시물이 없습니다.";
       $("post-list").innerHTML = posts.map(function (p) {
         return '<div class="adm-post"><div><div class="t">' + esc(p.title || "무제") + "</div>" +
           '<div class="d">' + (p.created || "").slice(0, 10) + " · 사진 " + (p.images || []).length + "장</div></div>" +
-          '<span class="del" data-id="' + p.id + '">삭제</span></div>';
+          '<div class="adm-post-actions"><button class="edit" type="button" data-id="' + p.id + '">수정</button>' +
+          '<button class="del" type="button" data-id="' + p.id + '">삭제</button></div></div>';
       }).join("");
     });
   }
 
   $("post-list").addEventListener("click", function (e) {
+    var edit = e.target.closest(".edit");
+    if (edit) { beginEdit(postsById[edit.dataset.id]); return; }
     var d = e.target.closest(".del"); if (!d) return;
     if (!confirm("이 게시물을 삭제할까요? 사진도 함께 지워집니다.")) return;
     authFetch("/api/posts/" + d.dataset.id, { method: "DELETE" }).then(function (r) {
