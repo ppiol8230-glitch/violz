@@ -18,7 +18,7 @@
   ⚠️ 언어판이 하위 폴더라 **모든 자산·내부 링크는 절대경로**(`/css/style.css`, `/maker`)여야 한다.
 - **페이지 성격**: special=고악기 3종 상세(각 악기 아래 유튜브 소리 감상 임베드 — **제작자 악기가 아니므로 "비올즈 악기로 연주" 같은 표현 절대 금지**, 캡션은 "소리 감상 — OO의 울림"),
   instruments=바이올린족, maker=제작자(사진 `img/maker.jpg`), repair=**평생 관리**(직접 제작 악기 한정 정책을 강점으로 서술), gallery=사진/영상+관리자 게시물, contact=주소·전화·이메일·지도.
-- **연락처(공개)**: 경기도 수원시 정조로 579, 2층 202호 / 010-4332-2665 / fiddle@kakao.com / Instagram `@viols_strings`.
+- **연락처(공개)**: 경기도 수원시 정조로 579, 2층 202호 / 010-6238-2665 / fiddle@kakao.com / Instagram `@viols_strings`.
 - **카피 확정(2026-07-29)**: 영문명은 **서양식 어순 `Kyungsoo Jun`**(JSON-LD 포함, en/contact의 alternateName만 Jun Kyungsoo). 신앙 카피 있음(홈·maker Soli Deo Gloria·special 수난곡 연결) — ⚠️ **'교회에서 연주했다'는 이력 표현 금지**(사실 아님, '종교음악에 마음을 두어 온'까지만). maker 본문·히어로 소개문은 유저 확정 문안('십수 년째/십수 해 동안'). 타이포: 제목 700·keep-all·manifesto는 justify·모바일 내비 전환 920px.
 - **카피 원칙**: 조용한 자기소개 톤. **CTA 버튼 남발·통계 타일·지어낸 인용구 금지**(전부 제거함). 없는 것(수상·학력)을 언급하는 방어적 문구 금지.
   제작 대수·사사/독학 이력 비공개. 가격은 "문의". 방문은 "언제나 환영, 오시기 전에 연락 한 번만" 톤.
@@ -32,4 +32,3 @@
 - **로컬 검증**: `npx wrangler dev -c wrangler.local.toml --port 87xx` (git 미포함 `wrangler.local.toml` + `.dev.vars`의 `ADMIN_PASSWORD`, 로컬 KV 시뮬레이터).
   국가 테스트는 `curl -H "cf-ipcountry: US"`로 (**프로덕션에서는 Cloudflare가 이 헤더를 덮어써서 위조 불가** — 라이브 검증은 쿠키로 리다이렉트 기구만 확인).
 - **SEO**: canonical·og:url·hreflang 4종(전 페이지), sitemap 21 URL, robots에 `/admin` 차단. 크롤러가 읽는 본문 2,958자(3개 앱 중 유일하게 정상).
-
