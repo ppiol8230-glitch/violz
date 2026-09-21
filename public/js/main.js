@@ -102,7 +102,7 @@
   music.loop = true;
   music.autoplay = true;
   music.playsInline = true;
-  music.volume = 0.5;
+  music.volume = 0.1;
   music.hidden = true;
   music.setAttribute("aria-hidden", "true");
 
@@ -126,7 +126,7 @@
   }
 
   function startMusic() {
-    music.volume = 0.5;
+    music.volume = 0.1;
     var result = music.play();
     if (result && typeof result.then === "function") {
       return result.then(function () {
